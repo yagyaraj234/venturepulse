@@ -13,6 +13,6 @@ router.get("/", getStartupList);
 router.get("/startup-search=:key", searchStartups);
 
 // secured routes
-router.post("/register-startup", verifyJWT, registerStartup);
+router.post("/register-startup", registerStartup);
 
 export default router;
