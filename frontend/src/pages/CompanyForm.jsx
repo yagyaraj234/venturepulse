@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import { BASE_URL } from "../constant";
 const CompanyForm = () => {
   const {
     register,
@@ -10,10 +11,35 @@ const CompanyForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-    console.log(data);
+    const {
+      StartupName,
+      Date,
+      AmountInUSD,
+      IndustryVertical,
+      SubVertical,
+      CityLocation,
+      InvestmentType,
+      InvestorsName,
+    } = data;
 
-    reset();
+    try {
+      const res = await axios.post(
+        `${BASE_URL}api/v1/startups/register-startup`,
+        {
+          StartupName,
+          Date,
+          AmountInUSD,
+          IndustryVertical,
+          SubVertical,
+          CityLocation,
+          InvestmentType,
+          InvestorsName,
+        }
+      );
+      reset();
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (

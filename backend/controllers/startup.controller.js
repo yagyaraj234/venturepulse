@@ -85,6 +85,7 @@ const getStartupList = asyncHandler(async (req, res) => {
 const searchStartups = asyncHandler(async (req, res) => {
   try {
     let param = req.params.key;
+    console.log(param);
 
     const startups = await Startup.find({
       $or: [

@@ -1,7 +1,11 @@
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../constant";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -9,11 +13,19 @@ const Signup = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    const { name, email, password } = data;
-
-    reset();
+  const onSubmit = async (data) => {
+    const { email, fullName, password } = data;
+    try {
+      const res = await axios.post(`${BASE_URL}api/v1/users/register`, {
+        email,
+        fullName,
+        password,
+      });
+      reset();
+      navigate("/startups");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -29,9 +41,8 @@ const Signup = () => {
         <input
           className="p-3  outline-none border-2 dark:border-none text-black rounded-md bg-gray-200"
           placeholder="xyz@gmail.com"
-          value="Yagyaraj"
-          {...register("name", {
-            required: "name is required",
+          {...register("fullName", {
+            required: "fullName is required",
             minLength: {
               value: 5,
               message: "minimum 5 characters required",
@@ -40,7 +51,6 @@ const Signup = () => {
         />
         <label className="text-gray-950 font-medium space-x-1">Email</label>
         <input
-          value="yagyaraj@gmail.com"
           className="p-3  outline-none border-2 dark:border-none text-black rounded-md bg-gray-200"
           placeholder="xyz@gmail.com"
           {...register("email", {
@@ -54,11 +64,11 @@ const Signup = () => {
         {errors.email && (
           <p className=" text-red-500">{`${errors.email.message}`}</p>
         )}
+
         <label className="text-gray-950 mt-2 font-medium space-x-1">
           Password
         </label>
         <input
-          value="8959yagya"
           className="p-3  outline-none border-2  text-black rounded-md  bg-gray-200"
           placeholder="%jd%392"
           {...register("password", {

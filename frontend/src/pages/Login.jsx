@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
-// import type { FieldValues } from "react-hook-form";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import { BASE_URL } from "../constant";
+import { useUser } from "../Context/AuthContext";
 const Login = () => {
+  const { setIsLoggedIn } = useUser();
   const {
     register,
     handleSubmit,
@@ -12,9 +14,16 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const { email, password } = data;
-    console.log(data);
-
-    reset();
+    try {
+      await axios.post(`${BASE_URL}api/v1/users/login`, {
+        email,
+        password,
+      });
+      setIsLoggedIn(true);
+      reset();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -30,7 +39,6 @@ const Login = () => {
         <input
           className="p-3  outline-none border-2 dark:border-none text-black rounded-md bg-gray-200  border-gray-900"
           placeholder="xyz@gmail.com"
-          value=""
           {...register("email", {
             required: "Email is required",
             pattern: {
@@ -46,7 +54,6 @@ const Login = () => {
           Password
         </label>
         <input
-          value=""
           className="p-3  outline-none border-2 dark:border-none text-black rounded-md  bg-gray-200  border-gray-900"
           placeholder="%jd%392"
           {...register("password", {

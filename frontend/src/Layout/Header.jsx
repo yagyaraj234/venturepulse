@@ -1,7 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useUser } from "../Context/AuthContext";
+import axios from "axios";
+import { BASE_URL } from "../constant";
 const Header = () => {
+  const { isLoggedIn, setIsLoggedIn } = useUser();
+
+  const handleLogOut = () => {
+    try {
+      axios.post(`${BASE_URL}api/v1/users/logout`);
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center justify-center">
       <Link
@@ -34,7 +46,7 @@ const Header = () => {
         aria-label="Header Navigation"
         className="peer-checked:pt-8 peer-checked:max-h-60 flex max-h-0 w-full flex-col items-center overflow-hidden transition-all lg:ml-24 lg:max-h-full lg:flex-row"
       >
-        <ul className="flex w-full flex-col items-center space-y-2 lg:flex-row lg:justify-center lg:space-y-0 items-center">
+        <ul className="flex w-full flex-col  space-y-2 lg:flex-row lg:justify-center lg:space-y-0 items-center">
           <li className="lg:mr-12">
             <Link
               className="rounded text-gray-700  font-semibold "
@@ -64,19 +76,31 @@ const Header = () => {
         </ul>
         <hr className="mt-4 w-full lg:hidden" />
         <div className="my-4 flex items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
-          <Link
-            to="/login"
-            title="login"
-            className="whitespace-nowrap rounded font-medium transition-all duration-200  hover:text-opacity-50"
-          >
-            Log in
-          </Link>
-          <Link
-            to="/signup"
-            className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200  hover:bg-blue-600"
-          >
-            Signup
-          </Link>
+          {!isLoggedIn ? (
+            <>
+              <Link
+                to="/login"
+                title="login"
+                className="whitespace-nowrap rounded font-medium transition-all duration-200  hover:text-opacity-50"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/signup"
+                className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200  hover:bg-blue-600"
+              >
+                Signup
+              </Link>
+            </>
+          ) : (
+            <div
+              onClick={handleLogOut}
+              title="logout"
+              className="whitespace-nowrap rounded font-medium transition-all duration-200  hover:text-opacity-50 cursor-pointer"
+            >
+              Log out
+            </div>
+          )}
         </div>
       </nav>
     </header>
