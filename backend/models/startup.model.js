@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const companySchema = new Schema(
+const startUpSchema = new Schema(
   {
     SNo: {
       type: Number,
@@ -26,17 +26,18 @@ const companySchema = new Schema(
     CityLocation: {
       type: String,
     },
-    InvestorName: {
+    InvestorsName: {
       type: String,
     },
-    InvestorType: {
+    InvestmentType: {
       type: String,
     },
-    Logo: {
+    AmountInUSD: {
       type: String,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-export const Company = model("Company", companySchema);
+export const Startup = model("startup", startUpSchema);

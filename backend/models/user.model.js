@@ -11,10 +11,10 @@ const userSchema = new Schema(
       type: String,
     },
     phone: { type: String, required: true, unique: true },
-    companies: [
+    startup: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Company",
+        ref: "Startup",
       },
     ],
     refreshToken: {

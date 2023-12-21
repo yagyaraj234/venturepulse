@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/user.route.js"; // Change "router as" to "router from"
+import userRouter from "./routes/user.route.js";
+import startupRouter from "./routes/startUp.route.js";
+// Change "router as" to "router from"
 
 const app = express();
 
@@ -21,5 +23,6 @@ app.use(
 
 // Routes declaration
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/startups", startupRouter);
 
 export default app;
