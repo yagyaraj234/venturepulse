@@ -10,7 +10,7 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    phone: { type: String, required: true, unique: true },
+    phone: { type: String },
     startup: [
       {
         type: Schema.Types.ObjectId,

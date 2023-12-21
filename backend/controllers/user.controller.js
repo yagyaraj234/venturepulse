@@ -2,8 +2,6 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
 import ApiResponse from "../utils/apiResponse.js";
 import { User } from "../models/user.model.js";
-import cloudinaryUpload from "../utils/cloudinary.js";
-import bcrypt from "bcrypt";
 
 const generateToken = async (userId) => {
   try {
@@ -21,7 +19,7 @@ const generateToken = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, password, phone } = req.body;
+  const { fullName, email, password } = req.body;
 
   if ([fullName, email, password].some((val) => val?.trim() === "")) {
     throw new ApiError(400, "All fields are required.");
@@ -32,27 +30,14 @@ const registerUser = asyncHandler(async (req, res) => {
   if (checkUserExistence) {
     throw new ApiError(409, "User already registered with this email.");
   }
-  //
-  if (phone) {
-    const registeredPhone = await User.findOne({ phone });
-    if (registeredPhone)
-      throw new ApiError(409, "Moblie number already registered.");
-  }
-
-  // upload file
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  const avatar = await cloudinaryUpload(avatarLocalPath);
-
   const user = await User.create({
     fullName,
     email,
     password,
-    phone: phone || "",
-    avatar: avatar?.url || "",
   });
 
   const createdUser = await User.findById(user._id).select(
-    "-password -phone -avatar -refreshToken -orders -ebooks"
+    "-password -refreshToken"
   );
 
   if (!createdUser) {
